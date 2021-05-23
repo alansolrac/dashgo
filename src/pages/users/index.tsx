@@ -12,7 +12,20 @@ export default function UserList() {
         const response = await fetch('http://localhost:3000/api/users')
         const data = await response.json()
         
-        return data;
+        const users = data.users.map(users => {
+            return {
+                id: users.id,
+                name: users.name,
+                email: users.email,
+                createdAt: new Date(users.createdAt).toLocaleDateString('pt-BR', {
+                    day:'2-digit',
+                    month: 'long',
+                    year:'numeric',
+                })
+            }
+        })
+        
+        return users;
     })        
 
     const isWideVersion = useBreakpointValue({
@@ -66,45 +79,23 @@ export default function UserList() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                <Tr>
-                                    <Td px={["4", "4", "6"]} >
-                                    <Checkbox colorScheme="pink"/>
+                                {data.map(user => {
+                                    return (
+                                    <Tr key={user.id}>
+                                        <Td px={["4", "4", "6"]} >
+                                        <Checkbox colorScheme="pink"/>
+                                        </Td>
+                                        <Td>
+                                            <Box>
+                                                <Text fontWeight="bold">{user.name}</Text>
+                                                <Text fontSize="sm" color="gray.300">{user.email}</Text>
+                                            </Box>
                                     </Td>
-                                    <Td>
-                                        <Box>
-                                            <Text fontWeight="bold">Alan Oliveira</Text>
-                                            <Text fontSize="sm" color="gray.300">developerjs.alan@gmail.com</Text>
-                                        </Box>
-                                    </Td>
-                                    { isWideVersion && <Td>04 de Abril, 2021</Td> }
+                                    { isWideVersion && <Td>{user.createdAt}</Td> }
                                     
                                 </Tr>
-                                <Tr>
-                                    <Td px={["4", "4", "6"]} >
-                                    <Checkbox colorScheme="pink"/>
-                                    </Td>
-                                    <Td>
-                                        <Box>
-                                            <Text fontWeight="bold">Alan Oliveira</Text>
-                                            <Text fontSize="sm" color="gray.300">developerjs.alan@gmail.com</Text>
-                                        </Box>
-                                    </Td>
-                                    { isWideVersion && <Td>04 de Abril, 2021</Td> }
-                                    
-                                </Tr>
-                                <Tr>
-                                    <Td px={["4", "4", "6"]} >
-                                    <Checkbox colorScheme="pink"/>
-                                    </Td>
-                                    <Td>
-                                        <Box>
-                                            <Text fontWeight="bold">Alan Oliveira</Text>
-                                            <Text fontSize="sm" color="gray.300">developerjs.alan@gmail.com</Text>
-                                        </Box>
-                                    </Td>
-                                    { isWideVersion && <Td>04 de Abril, 2021</Td> }
-                                    
-                                </Tr>
+                                    )
+                                })}
                             </Tbody>
                         </Table>
                         <Pagination />
